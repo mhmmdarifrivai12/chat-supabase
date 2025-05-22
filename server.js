@@ -23,19 +23,6 @@ const init = async () => {
 
   await server.register(require('@hapi/inert'));
 
-  // Static files
-  server.route([
-    {
-      method: 'GET',
-      path: '/',
-      handler: (req, h) => h.file('index.html')
-    },
-    {
-      method: 'GET',
-      path: '/style.css',
-      handler: (req, h) => h.file('style.css')
-    }
-  ]);
 
   // REGISTER
   server.route({
@@ -60,6 +47,25 @@ const init = async () => {
       return h.response({ message: 'Registered successfully', user: data[0] }).code(201);
     }
   });
+
+  // Menu Home (default route)
+server.route({
+  method: 'GET',
+  path: '/',
+  handler: (req, h) => {
+    return `
+      <h1>Welcome to My API Home</h1>
+      <ul>
+        <li><a href="/users">List Users</a></li>
+        <li><a href="/messages?sender_id=1&receiver_id=2">Get Messages (Example)</a></li>
+        <li>POST /register - Register User</li>
+        <li>POST /login - Login User</li>
+        <li>POST /chat - Send Message</li>
+      </ul>
+    `;
+  }
+});
+
 
   // LOGIN
   server.route({
